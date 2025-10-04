@@ -1,0 +1,26 @@
+body {
+	font-family: sans-serif;
+	line-height: 2;
+
+	margin: 2em;
+}
+
+p {
+	padding: .5em 0em;
+}
+
+code,
+pre {
+	background-color: #eee;
+}
+
+pre {
+	overflow: auto;
+}
+
+hr {
+	border: none;
+	height: 3px;
+	background-color: #f0f0f0;
+	margin: 2em 4em;
+}
