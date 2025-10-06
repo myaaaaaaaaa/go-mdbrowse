@@ -93,7 +93,21 @@ func mktemp() string {
 	return basedir
 }
 
+//go:embed go.mod
+var gomod string
+
 func main() {
+	{
+		url := gomod
+		url, _, _ = strings.Cut(url, "\n")
+		_, url, _ = strings.Cut(url, " ")
+		url = strings.TrimSpace(url)
+
+		fmt.Println()
+		fmt.Printf("\tgo install %s@latest\n", url)
+		fmt.Println()
+	}
+
 	markdownFiles := findMarkdownFiles()
 
 	outDir := mktemp()
