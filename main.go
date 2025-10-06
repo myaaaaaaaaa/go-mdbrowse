@@ -26,6 +26,7 @@ var css string
 func mark2html(text string) string {
 	var buf bytes.Buffer
 
+	fmt.Fprintln(&buf, `<meta name="viewport" content="width=device-width, initial-scale=1" />`)
 	fmt.Fprintln(&buf, `<style>`)
 	fmt.Fprintln(&buf, css)
 	fmt.Fprintln(&buf, `</style>`)
