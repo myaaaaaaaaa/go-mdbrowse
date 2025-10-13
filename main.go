@@ -93,13 +93,13 @@ var gomod string
 
 func main() {
 	{
-		url := gomod
-		url, _, _ = strings.Cut(url, "\n")
-		_, url, _ = strings.Cut(url, " ")
-		url = strings.TrimSpace(url)
+		pkgName := gomod
+		pkgName, _, _ = strings.Cut(pkgName, "\n")
+		_, pkgName, _ = strings.Cut(pkgName, " ")
+		pkgName = strings.TrimSpace(pkgName)
 
 		fmt.Println()
-		fmt.Printf("\tgo install %s@latest\n", url)
+		fmt.Printf("\tgo install %s@latest\n", pkgName)
 		fmt.Println()
 	}
 
