@@ -51,15 +51,10 @@ func findMarkdownFiles() (rt []string) {
 		file = filepath.Clean(file)
 
 		err := filepath.WalkDir(file, func(p string, d os.DirEntry, err error) error {
-			if err != nil {
-				return err
-			}
-
 			if !d.IsDir() && strings.HasSuffix(p, ".md") {
 				rt = append(rt, p)
 			}
-
-			return nil
+			return err
 		})
 
 		if err != nil {
