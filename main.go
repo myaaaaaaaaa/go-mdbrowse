@@ -43,7 +43,7 @@ func mark2html(text string) string {
 func findMarkdownFiles() (rt []string) {
 	files := os.Args[1:]
 	if len(files) == 0 {
-		files = []string{"."}
+		//files = []string{"."}
 	}
 
 	for _, file := range files {
@@ -70,6 +70,15 @@ func printLink(f string) {
 	f = strings.ReplaceAll(f, " ", "%20")
 
 	fmt.Println("file://" + f)
+}
+
+func convertFile(markdownFile, htmlFile string) {
+	data := must(os.ReadFile(markdownFile))
+	data = []byte(mark2html(string(data)))
+	must(0, os.WriteFile(htmlFile, data, 0600))
+
+	fmt.Print(markdownFile, "    ")
+	printLink(htmlFile)
 }
 
 func mktemp() string {
@@ -113,11 +122,25 @@ func main() {
 		i++
 		htmlFile := fmt.Sprintf("%s/%05d.htm", outDir, i)
 
-		data := must(os.ReadFile(markdownFile))
-		data = []byte(mark2html(string(data)))
-		must(0, os.WriteFile(htmlFile, data, 0600))
+		convertFile(markdownFile, htmlFile)
+	}
 
-		fmt.Print(markdownFile, "    ")
-		printLink(htmlFile)
+	var tmpFiles []string
+	{
+		tmpFiles = append(tmpFiles, must(filepath.Glob("/tmp/*.md"))...)
+		rundir := os.Getenv("XDG_RUNTIME_DIR")
+		if rundir != "" {
+			tmpFiles = append(tmpFiles, must(filepath.Glob(rundir+"/*.md"))...)
+		}
+	}
+	for _, tmpFile := range tmpFiles {
+		htmlFile := tmpFile + ".htm"
+
+		_, statErr := os.Stat(htmlFile)
+		if statErr == nil {
+			continue
+		}
+
+		convertFile(tmpFile, htmlFile)
 	}
 }
