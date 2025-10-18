@@ -11,7 +11,16 @@ import (
 	_ "embed"
 
 	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
 )
+
+func newMarkdown() goldmark.Markdown {
+	return goldmark.New(
+		goldmark.WithExtensions(
+			extension.GFM,
+		),
+	)
+}
 
 func must[T any](val T, err error) T {
 	if err != nil {
@@ -31,7 +40,8 @@ func mark2html(text string) string {
 	fmt.Fprintln(&buf, css)
 	fmt.Fprintln(&buf, `</style>`)
 
-	err := goldmark.Convert([]byte(text), &buf)
+	md := newMarkdown()
+	err := md.Convert([]byte(text), &buf)
 
 	if err != nil {
 		rawText := "markdown error: " + err.Error() + "\n\n" + text
