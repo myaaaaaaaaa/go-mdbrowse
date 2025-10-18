@@ -28,18 +28,12 @@ func TestHTMLSmoke(t *testing.T) {
 
 	decoder := xml.NewDecoder(strings.NewReader(htmlString))
 
-	for {
-		_, err := decoder.Token()
-
-		if errors.Is(err, io.EOF) {
-			break
-		}
-		if err == nil {
-			continue
-		}
-
+	var err error
+	for err == nil {
+		_, err = decoder.Token()
+	}
+	if !errors.Is(err, io.EOF) {
 		t.Error(err)
-		break
 	}
 }
 
