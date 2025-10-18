@@ -115,10 +115,10 @@ func tmpdir(getenv func(string) string) string {
 	return rt
 }
 func mktemp() string {
-	basedir := tmpdir(os.Getenv)
-	basedir += "/markdown/"
-	basedir += fmt.Sprint(time.Now().Unix())
-	return basedir
+	return fmt.Sprintf("%s/md/%d",
+		tmpdir(os.Getenv),
+		time.Now().Unix(),
+	)
 }
 
 //go:embed go.mod
