@@ -51,16 +51,15 @@ func TestGlobber(t *testing.T) {
 		"d.md":         &fstest.MapFile{},
 		"e.md/d/d/f":   &fstest.MapFile{},
 		"f.md/d/f.md":  &fstest.MapFile{},
+		"g/error.md":   &fstest.MapFile{},
 
-		"g/1.md": &fstest.MapFile{},
-		"g/2.md": &fstest.MapFile{},
-		"g/3.md": &fstest.MapFile{},
+		"z/1.md": &fstest.MapFile{},
+		"z/2.md": &fstest.MapFile{},
+		"z/3.md": &fstest.MapFile{},
 
-		"h/1/1.md":       &fstest.MapFile{},
-		"h/2/error/2.md": &fstest.MapFile{},
-		"h/3/3.md":       &fstest.MapFile{},
-
-		"i/error.md": &fstest.MapFile{},
+		"y/1/1.md":       &fstest.MapFile{},
+		"y/2/error/2.md": &fstest.MapFile{},
+		"y/3/3.md":       &fstest.MapFile{},
 	}}
 
 	assert := func(want string, arg string) {
@@ -83,10 +82,9 @@ func TestGlobber(t *testing.T) {
 	assert("d.md", "d.md")
 	assert("", "e.md")
 	assert("f.md/d/f.md", "f.md")
+	assert("g/error.md", "g")
 
-	assert("g/1.md g/2.md g/3.md", "g")
+	assert("z/1.md z/2.md z/3.md", "z")
 
-	assert("h/1/1.md h/3/3.md", "h")
-
-	assert("i/error.md", "i")
+	assert("y/1/1.md y/3/3.md", "y")
 }
