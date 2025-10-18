@@ -10,6 +10,13 @@ import (
 	"testing/fstest"
 )
 
+func assertEqual[T comparable](t *testing.T, want, got T) {
+	t.Helper()
+	if got != want {
+		t.Errorf("got %v    want %v", got, want)
+	}
+}
+
 func TestHTMLSmoke(t *testing.T) {
 	htmlString := mark2html(`# Hello
 		world
@@ -40,7 +47,7 @@ func TestTmpdir(t *testing.T) {
 	assert := func(want, rundir, user string) {
 		t.Helper()
 
-		got := tmpdir(func(s string) string {
+		assertEqual(t, want, tmpdir(func(s string) string {
 			switch s {
 			case "XDG_RUNTIME_DIR":
 				return rundir
@@ -48,11 +55,7 @@ func TestTmpdir(t *testing.T) {
 				return user
 			}
 			panic("invalid key: " + s)
-		})
-
-		if want != got {
-			t.Errorf("want %s    got %s", want, got)
-		}
+		}))
 	}
 
 	assert("/tmp", "", "")
@@ -99,10 +102,7 @@ func TestGlobber(t *testing.T) {
 			t.Error(err)
 		}
 
-		got := strings.Join(gotSlice, " ")
-		if want != got {
-			t.Errorf("want %s    got %s", want, got)
-		}
+		assertEqual(t, want, strings.Join(gotSlice, " "))
 	}
 
 	assert("a", "")
