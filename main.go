@@ -29,7 +29,7 @@ func must[T any](val T, err error) T {
 	return val
 }
 
-//go:embed markdown.css
+//go:embed style.css
 var css string
 
 func mark2html(text string) string {
