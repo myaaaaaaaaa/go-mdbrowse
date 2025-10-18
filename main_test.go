@@ -45,7 +45,7 @@ func TestFindMD(t *testing.T) {
 		}
 	}
 
-	fs := fstest.MapFS{
+	os.CopyFS(".", fstest.MapFS{
 		"a/f":          &fstest.MapFile{},
 		"b/f.md":       &fstest.MapFile{},
 		"c/d/d/d/f.md": &fstest.MapFile{},
@@ -56,8 +56,7 @@ func TestFindMD(t *testing.T) {
 		"g/1.md": &fstest.MapFile{},
 		"g/2.md": &fstest.MapFile{},
 		"g/3.md": &fstest.MapFile{},
-	}
-	os.CopyFS(".", fs)
+	})
 
 	assert("")
 	assert("", "a")

@@ -40,8 +40,7 @@ func mark2html(text string) string {
 	fmt.Fprintln(&buf, css)
 	fmt.Fprintln(&buf, `</style>`)
 
-	md := newMarkdown()
-	err := md.Convert([]byte(text), &buf)
+	err := newMarkdown().Convert([]byte(text), &buf)
 
 	if err != nil {
 		rawText := "markdown error: " + err.Error() + "\n\n" + text
