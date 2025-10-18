@@ -15,14 +15,6 @@ import (
 	"github.com/yuin/goldmark/extension"
 )
 
-func newMarkdown() goldmark.Markdown {
-	return goldmark.New(
-		goldmark.WithExtensions(
-			extension.GFM,
-		),
-	)
-}
-
 func must[T any](val T, err error) T {
 	if err != nil {
 		panic(err)
@@ -33,6 +25,13 @@ func must[T any](val T, err error) T {
 //go:embed style.css
 var css string
 
+func newMarkdown() goldmark.Markdown {
+	return goldmark.New(
+		goldmark.WithExtensions(
+			extension.GFM,
+		),
+	)
+}
 func mark2html(text string) string {
 	var buf bytes.Buffer
 
