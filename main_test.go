@@ -66,7 +66,7 @@ func TestGlobber(t *testing.T) {
 		"y/3/3.md":       &fstest.MapFile{},
 	}}
 
-	assert := func(want string, arg string) {
+	assert := func(arg, want string) {
 		t.Helper()
 		var gotSlice []string
 		err := fs.WalkDir(mapfs, arg, globber{&gotSlice}.walkDirFunc)
@@ -80,15 +80,15 @@ func TestGlobber(t *testing.T) {
 		}
 	}
 
-	assert("", "a")
-	assert("b/f.md", "b")
-	assert("c/d/d/d/f.md", "c")
+	assert("a", "")
+	assert("b", "b/f.md")
+	assert("c", "c/d/d/d/f.md")
 	assert("d.md", "d.md")
-	assert("", "e.md")
-	assert("f.md/d/f.md", "f.md")
-	assert("g/error.md", "g")
+	assert("e.md", "")
+	assert("f.md", "f.md/d/f.md")
+	assert("g", "g/error.md")
 
-	assert("z/1.md z/2.md z/3.md", "z")
+	assert("z", "z/1.md z/2.md z/3.md")
 
-	assert("y/1/1.md y/3/3.md", "y")
+	assert("y", "y/1/1.md y/3/3.md")
 }
