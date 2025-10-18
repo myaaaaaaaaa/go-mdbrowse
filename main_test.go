@@ -15,6 +15,10 @@ func TestHTMLSmoke(t *testing.T) {
 		world
 	`)
 
+	if !strings.Contains(htmlString, "<style") {
+		t.Error("no <style> element found")
+	}
+
 	decoder := xml.NewDecoder(strings.NewReader(htmlString))
 
 	for {
