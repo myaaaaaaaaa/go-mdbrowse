@@ -57,18 +57,23 @@ func argFiles() []string {
 	return files
 }
 
+type globber struct {
+	files *[]string
+}
+
+func (g globber) walkDirFunc(p string, d os.DirEntry, err error) error {
+	if !d.IsDir() && strings.HasSuffix(p, ".md") {
+		*g.files = append(*g.files, p)
+	}
+	return err
+}
+
 func findMarkdownFiles(files []string) (rt []string) {
 	for _, file := range files {
 		// For consistency
 		file = filepath.Clean(file)
 
-		err := filepath.WalkDir(file, func(p string, d os.DirEntry, err error) error {
-			if !d.IsDir() && strings.HasSuffix(p, ".md") {
-				rt = append(rt, p)
-			}
-			return err
-		})
-
+		err := filepath.WalkDir(file, globber{&rt}.walkDirFunc)
 		if err != nil {
 			panic(err)
 		}
