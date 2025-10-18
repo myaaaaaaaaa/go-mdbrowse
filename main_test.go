@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"io"
-	"os"
+	"io/fs"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -32,20 +32,8 @@ func TestHTMLSmoke(t *testing.T) {
 	}
 }
 
-func TestFindMD(t *testing.T) {
-	t.Chdir(t.TempDir())
-
-	assert := func(want string, args ...string) {
-		t.Helper()
-
-		gotSlice := findMarkdownFiles(args)
-		got := strings.Join(gotSlice, " ")
-		if want != got {
-			t.Errorf("want %s    got %s", want, got)
-		}
-	}
-
-	os.CopyFS(".", fstest.MapFS{
+func TestGlobber(t *testing.T) {
+	mapfs := fstest.MapFS{
 		"a/f":          &fstest.MapFile{},
 		"b/f.md":       &fstest.MapFile{},
 		"c/d/d/d/f.md": &fstest.MapFile{},
@@ -56,9 +44,19 @@ func TestFindMD(t *testing.T) {
 		"g/1.md": &fstest.MapFile{},
 		"g/2.md": &fstest.MapFile{},
 		"g/3.md": &fstest.MapFile{},
-	})
+	}
 
-	assert("")
+	assert := func(want string, arg string) {
+		t.Helper()
+		var gotSlice []string
+		fs.WalkDir(mapfs, arg, globber{&gotSlice}.walkDirFunc)
+
+		got := strings.Join(gotSlice, " ")
+		if want != got {
+			t.Errorf("want %s    got %s", want, got)
+		}
+	}
+
 	assert("", "a")
 	assert("b/f.md", "b")
 	assert("c/d/d/d/f.md", "c")
