@@ -29,13 +29,19 @@ th {
 }
 
 
-code,
-pre {
+code {
 	background-color: #eee;
+}
+
+pre>code {
+	background-color: initial;
 }
 
 pre {
 	overflow: auto;
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px 5px #ddd;
+	padding: 1.5em;
 }
 
 hr {
