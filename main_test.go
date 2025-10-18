@@ -36,6 +36,31 @@ func TestHTMLSmoke(t *testing.T) {
 	}
 }
 
+func TestTmpdir(t *testing.T) {
+	assert := func(want, rundir, user string) {
+		t.Helper()
+
+		got := tmpdir(func(s string) string {
+			switch s {
+			case "XDG_RUNTIME_DIR":
+				return rundir
+			case "USER":
+				return user
+			}
+			panic("invalid key: " + s)
+		})
+
+		if want != got {
+			t.Errorf("want %s    got %s", want, got)
+		}
+	}
+
+	assert("/tmp", "", "")
+	assert("/tmp/usr", "", "usr")
+	assert("/run/usr", "/run/usr", "")
+	assert("/run/usr", "/run/usr", "usr")
+}
+
 type errorFS struct {
 	fs.FS
 }

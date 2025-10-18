@@ -100,17 +100,22 @@ func convertFile(markdownFile, htmlFile string) {
 	printLink(htmlFile)
 }
 
-func mktemp() string {
-	basedir := os.Getenv("XDG_RUNTIME_DIR")
-	if basedir == "" {
-		basedir = "/tmp"
-
-		user := os.Getenv("USER")
-		if user != "" {
-			basedir += "/" + user
-		}
+func tmpdir(getenv func(string) string) string {
+	rt := getenv("XDG_RUNTIME_DIR")
+	if rt != "" {
+		return rt
 	}
 
+	rt = "/tmp"
+	user := getenv("USER")
+	if user != "" {
+		rt += "/" + user
+	}
+
+	return rt
+}
+func mktemp() string {
+	basedir := tmpdir(os.Getenv)
 	basedir += "/markdown/"
 	basedir += fmt.Sprint(time.Now().Unix())
 	return basedir
