@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -54,10 +55,14 @@ type globber struct {
 }
 
 func (g globber) walkDirFunc(p string, d os.DirEntry, err error) error {
+	if err != nil {
+		fmt.Println("skipping dir:", err)
+		return fs.SkipDir
+	}
 	if !d.IsDir() && strings.HasSuffix(p, ".md") {
 		*g.files = append(*g.files, p)
 	}
-	return err
+	return nil
 }
 
 func findMarkdownFiles() (rt []string) {
