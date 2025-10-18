@@ -50,12 +50,15 @@ func mark2html(text string) string {
 	return buf.String()
 }
 
-func findMarkdownFiles() (rt []string) {
+func argFiles() []string {
 	files := os.Args[1:]
 	if len(files) == 0 {
 		//files = []string{"."}
 	}
+	return files
+}
 
+func findMarkdownFiles(files []string) (rt []string) {
 	for _, file := range files {
 		// For consistency
 		file = filepath.Clean(file)
@@ -122,7 +125,7 @@ func main() {
 		fmt.Println()
 	}
 
-	markdownFiles := findMarkdownFiles()
+	markdownFiles := findMarkdownFiles(argFiles())
 
 	outDir := mktemp()
 	must(0, os.MkdirAll(outDir, 0700))
